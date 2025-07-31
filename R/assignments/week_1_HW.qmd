@@ -20,7 +20,7 @@ library(tidyr)
 data(penguins)
 ```
 
----
+------------------------------------------------------------------------
 
 ## HW1: Fill-in-the-Code Practice
 
@@ -38,19 +38,19 @@ islands_vector <- unique(penguins$____)
 class(penguins$____)
 ```
 
-**3.` R Basics`:** Use the `nrow()` function to find the number of rows in the penguins dataset.
+**3.`R Basics`:** Use the `nrow()` function to find the number of rows in the penguins dataset.
 
 ```{r}
 nrow(____)
 ```
 
-**4.` R Basics`:** Use `table()` to count how many penguins there are for each `species`.
+**4.`R Basics`:** Use `table()` to count how many penguins there are for each `species`.
 
 ```{r}
 table(penguins$____)
 ```
 
-**5.` R Basics`:** Use `mean()` to calculate the average `flipper_length_mm`, removing missing values.
+**5.`R Basics`:** Use `mean()` to calculate the average `flipper_length_mm`, removing missing values.
 
 ```{r}
 mean(penguins$____, na.rm = ____)
@@ -150,11 +150,12 @@ penguins %>% unite(col = species_island, ____, ____, sep = "_")
 
 **20. `tidyr` (Blast from the Past):** This is a preview. If you had a "wide" dataset, which `tidyr` function would you use to make it "long"?
 
-```
+```         
 # Function name:
 # pivot_....()
 ```
----
+
+------------------------------------------------------------------------
 
 ## HW2: Build-From-Scratch Task
 
@@ -207,4 +208,3 @@ penguins %>% unite(col = species_island, ____, ____, sep = "_")
 ```{r}
 # Your code here
 ```
-

@@ -6,7 +6,7 @@ title: "Videos 1 - 4 (EMPTY)"
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
-## **Video 1) R & Basics with `mtcars`**
+## **Video 1 R & Basics with `mtcars`**
 
 #### **Video Notes - Packages & Libraries**
 
@@ -35,7 +35,7 @@ To see the first few rows of the data, we use the `head()` function.
 
 ```{r}
 # The head() function displays the first six rows of the data set
-# head(____)
+head(mtcars)
 ```
 
 ::: {style="height: 300px; background-color: white;"}
@@ -52,7 +52,7 @@ If you want to see the entire interactive data frame in a new tab, you can use t
 
 #### **Data Structures**
 
-**a) Vectors**: A vector is a one-dimensional sequence of data elements of the same type. This type can be numeric, character (string), or logical (boolean).
+**a Vectors**: A vector is a one-dimensional sequence of data elements of the same type. This type can be numeric, character (string), or logical (boolean).
 
 -   **Numeric**: Numbers (e.g., 10.5, 55, -3)
 -   **Character**: Text, also known as strings (e.g., "hello", "R")
@@ -62,17 +62,20 @@ If you want to see the entire interactive data frame in a new tab, you can use t
 
 ```{r}
 # # Create a numeric vector of miles-per-gallon (mpg) values
-# mpg_vector <- ____
+mpg_vector <- mtcars$mpg
+mpg_vector
 # # Create a character vector of the car names
-# car_names_vector <- ____
+car_names_vector <- rownames(mtcars)
+car_names_vector
 # # Create a boolean vector indicating if a car has more than 150 horsepower
-# powerful_boolean_vector <- ____
+powerful_boolean_vector <- mtcars$hp > 150
+powerful_boolean_vector
 ```
 
 ::: {style="height: 300px; background-color: white;"}
 :::
 
-**b) Data Frames**: This is the primary structure for tabular data in R. `mtcars` is a classic example.
+**b Data Frames**: This is the primary structure for tabular data in R. `mtcars` is a classic example.
 
 #### **Video Notes - Tibble and Data Frames**
 
@@ -82,13 +85,13 @@ While I primarily use data frames because that's what I'm used to, you will ofte
 
 ```{r}
 # # Check the class of the mtcars object
-# class(____)
+class(mtcars)
 ```
 
 ::: {style="height: 300px; background-color: white;"}
 :::
 
-**c) Lists**: A list is a versatile R object that can contain elements of different types.
+**c Lists**: A list is a versatile R object that can contain elements of different types.
 
 #### **Video Notes - Lists**
 
@@ -98,21 +101,27 @@ If you're familiar with programming, a **named list** in R is very similar to a 
 
 ```{r}
 # # Create a list containing a numeric vector and a data frame
-# my_list <- list(
-#   description = ____,
-#   mpg_stats = ____,
-#   sample_cars = ____
-# )
+my_list <- list(
+  description = "Car Data",
+  mpg_stats = summary(mtcars$mpg),
+  sample_cars = head(mtcars, 3)
+)
+my_list
 # 
 # # Extract elements from the list
 # # Method 1: Using the $ operator
 # description <- ____
+my_list$description
+
 # 
 # # Method 2: Using double square brackets [[ ]] with the name
 # mpg_summary <- ____
+my_list[[1]]
+
 # 
 # # Method 3: Using double square brackets [[ ]] with the index
 # first_two_cars <- ____
+my_list[[2]]
 ```
 
 ------------------------------------------------------------------------
@@ -125,7 +134,7 @@ If you're familiar with programming, a **named list** in R is very similar to a 
 ::: {style="height: 300px; background-color: white;"}
 :::
 
-## **Video 2) `dplyr` - 1: Core Data Transformations**
+## **Video 2 `dplyr` - 1: Core Data Transformations**
 
 #### **Video Notes - Pipe Operator**
 
@@ -135,12 +144,13 @@ Here we use functions from the `dplyr` package. `dplyr` provides a "grammar" for
 
 ```{r}
 # # Load the dplyr package
-# library(____)
-# library(tibble)
+library(dplyr)
+library(tibble)
 # 
 # # Convert row names to a column for easier manipulation
-# mtcars_df <- mtcars %>%
-#   rownames_to_column(var = ____)
+mtcars_df <- mtcars %>%
+  tibble::rownames_to_column(var = "car_model")
+View(mtcars_df)
 ```
 
 ::: {style="height: 300px; background-color: white;"}
@@ -156,8 +166,9 @@ Here we use functions from the `dplyr` package. `dplyr` provides a "grammar" for
 
 ```{r}
 # # Choose the car_model, mpg, hp, and wt columns
-# car_performance <- mtcars_df %>%
-#   select(____)
+car_performance <- mtcars_df %>%
+  select(car_model, mpg, hp, wt)
+View(car_performance)
 ```
 
 ::: {style="height: 300px; background-color: white;"}
@@ -173,8 +184,9 @@ Here we use functions from the `dplyr` package. `dplyr` provides a "grammar" for
 
 ```{r}
 # # Add a new column for weight in kilograms
-# car_performance_kilos <- car_performance %>%
-#   mutate(wt_kg = ____)
+car_performance_kilos <- car_performance %>%
+  mutate(wt_kg = wt * 1000 * 0.45)
+View(car_performance_kilos)
 ```
 
 ::: {style="height: 300px; background-color: white;"}
@@ -190,8 +202,9 @@ Here we use functions from the `dplyr` package. `dplyr` provides a "grammar" for
 
 ```{r}
 # # Find cars with more than 200 horsepower
-# powerful_cars <- car_performance %>%
-#   filter(____)
+powerful_cars <- car_performance %>%
+  filter(hp > 200)
+View(powerful_cars)
 ```
 
 ::: {style="height: 300px; background-color: white;"}
@@ -205,9 +218,10 @@ Here we use functions from the `dplyr` package. `dplyr` provides a "grammar" for
 
 ```{r}
 # # Find the average mpg for each cylinder count
-# avg_by_cyl <- mtcars_df %>%
-#   group_by(____) %>%
-#   summarize(avg_mpg = mean(____))
+avg_by_cyl <- mtcars_df %>%
+  group_by(cyl) %>%
+  summarize(avg_mpg = mean(mpg))
+View(avg_by_cyl)
 ```
 
 ::: {style="height: 300px; background-color: white;"}
@@ -221,8 +235,8 @@ Here we use functions from the `dplyr` package. `dplyr` provides a "grammar" for
 
 ```{r}
 # Sort cars by miles-per-gallon, from highest to lowest
-# sorted_by_mpg <- car_performance %>%
-#   arrange(____)
+sorted_by_mpg <- car_performance %>%
+  arrange(mpg)
 ```
 
 ------------------------------------------------------------------------
@@ -235,7 +249,7 @@ Here we use functions from the `dplyr` package. `dplyr` provides a "grammar" for
 ::: {style="height: 300px; background-color: white;"}
 :::
 
-## **Video 3) `ggplot2` - 1: The Grammar of Graphics**
+## **Video 3 `ggplot2` - 1: The Grammar of Graphics**
 
 #### **Video Notes - `+`**
 
@@ -245,7 +259,7 @@ This section uses the `ggplot2` package to visualize the `mtcars` data. `ggplot2
 
 ```{r}
 # # Load the ggplot2 package
-# library(____)
+library(ggplot2)
 ```
 
 ::: {style="height: 300px; background-color: white;"}
@@ -263,8 +277,8 @@ Let's build a scatter plot showing the relationship between car weight and fuel 
 
 ```{r}
 # # Initialize plot and map weight to x-axis and mpg to y-axis
-# p1 <- ggplot(data = ____, mapping = aes(x = ____, y = ____))
-# p1
+p1 <- ggplot(data = mtcars, mapping = aes(x = wt, y = mpg))
+p1
 ```
 
 **Step 2: Add a Geometric Layer** Now we add a layer with a `geom_` function to actually draw something. `geom_point()` creates a scatter plot.
@@ -273,7 +287,7 @@ Let's build a scatter plot showing the relationship between car weight and fuel 
 
 ```{r}
 # # Add the point layer to our initialized plot
-# p1 + geom_point()
+p1 + geom_point()
 ```
 
 ::: {style="height: 300px; background-color: white;"}
@@ -291,8 +305,8 @@ The `geom_histogram()` function requires only an `x` aesthetic. The `binwidth` a
 
 ```{r}
 # # Create a histogram of the mpg variable
-# ggplot(data = ____, mapping = aes(x = ____)) +
-#   geom_histogram(binwidth = ____)
+ggplot(data = mtcars, mapping = aes(x = mpg)) +
+  geom_histogram(binwidth = 4)
 ```
 
 ::: {style="height: 300px; background-color: white;"}
@@ -310,8 +324,8 @@ We use `factor(cyl)` to tell `ggplot` to treat the number of cylinders as distin
 
 ```{r}
 # # Create boxplots of mpg for each cylinder group
-# ggplot(data = ____, mapping = aes(x = factor(____), y = ____)) +
-#   geom_boxplot()
+ggplot(data = mtcars, mapping = aes(x = factor(cyl), y = mpg)) +
+  geom_boxplot()
 ```
 
 ::: {style="height: 300px; background-color: white;"}
@@ -329,8 +343,8 @@ Let's take our original scatter plot and improve it.
 
 ```{r}
 # # This is our base plot from before
-# base_plot <- ggplot(data = ____, mapping = aes(x = ____, y = ____)) +
-#   geom_point()
+base_plot <- ggplot(data = mtcars, mapping = aes(x = wt, y = mpg)) +
+  geom_point()
 ```
 
 **Step 2: Add Labels** The `labs()` function lets you change the title, subtitle, caption, and axis labels.
@@ -338,13 +352,13 @@ Let's take our original scatter plot and improve it.
 ***#Fill in the blank***
 
 ```{r}
-# labeled_plot <- base_plot +
-#   labs(
-#     title = ____,
-#     x = ____,
-#     y = ____
-#   )
-# labeled_plot
+labeled_plot <- base_plot +
+  labs(
+    title = "Fuel Efficiency vs. Car Weight",
+    x = "Weight (1000 lbs)",
+    y = "Miles per Gallon"
+  )
+labeled_plot
 ```
 
 **Step 3: Add a Theme** `theme_` functions control the non-data elements of the plot, like the background color and grid lines.
@@ -352,9 +366,9 @@ Let's take our original scatter plot and improve it.
 ***#Fill in the blank***
 
 ```{r}
-# themed_plot <- labeled_plot +
-#   theme_minimal()
-# themed_plot
+themed_plot <- labeled_plot +
+  theme_minimal()
+themed_plot
 ```
 
 **Step 4: Add a Trendline** `geom_smooth()` can add a smoothed conditional mean. The argument `method = "lm"` specifies a linear model trendline.
@@ -362,9 +376,9 @@ Let's take our original scatter plot and improve it.
 ***#Fill in the blank***
 
 ```{r}
-# final_plot <- themed_plot +
-#   geom_smooth(method = ____, se = ____)
-# final_plot
+final_plot <- themed_plot +
+  geom_smooth(method = "lm", se = FALSE )
+final_plot
 ```
 
 ------------------------------------------------------------------------
@@ -377,7 +391,7 @@ Let's take our original scatter plot and improve it.
 ::: {style="height: 300px; background-color: white;"}
 :::
 
-## **Video 4) `dplyr` - 2 & `tidyr`: Advanced Transformation**
+## **Video 4 `dplyr` - 2 & `tidyr`: Advanced Transformation**
 
 #### **Video Notes - Reshape Data**
 
@@ -387,8 +401,8 @@ This section covers more advanced data wrangling. We'll combine data with `dplyr
 
 ```{r}
 # Load dplyr and tidyr packages
-library(____)
-library(____)
+library(dplyr)
+library(tidyr)
 ```
 
 ::: {style="height: 300px; background-color: white;"}
@@ -411,7 +425,7 @@ df2 <- tibble(x = 3:4, y = c("c", "d"))
 
 ```{r}
 # bind_rows() stacks them into one data frame
-combined_rows <- bind_rows(____, ____)
+combined_rows <- bind_rows(df1, df2)
 ```
 
 ::: {style="height: 300px; background-color: white;"}
