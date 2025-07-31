@@ -446,9 +446,9 @@ df_b <- tibble(z = 4:6)
 
 ***#Fill in the blank***
 
-``` r
+```{r}
 # bind_cols() combines them side-by-side
-combined_cols <- bind_cols(____, ____)
+combined_cols <- bind_cols(df_a, df_b)
 ```
 
 ::: {style="height: 300px; background-color: white;"}
@@ -490,7 +490,7 @@ A `left_join` keeps **all rows** from the first (left) data frame and adds match
 
 ```{r}
 # This keeps all members from band_members and adds their instrument if available
-left_join(____, ____, by = "name")
+left_join(band_instruments, band_members, by = "name")
 ```
 
 ::: {style="height: 300px; background-color: white;"}
@@ -506,7 +506,7 @@ An `inner_join` only keeps rows where the key exists in **both** data frames.
 
 ```{r}
 # This only includes members who are in BOTH tables (John and Paul)
-inner_join(____, ____, by = "name")
+inner_join(band_members, band_instruments, by = "name")
 ```
 
 ::: {style="height: 300px; background-color: white;"}
@@ -522,7 +522,7 @@ A `full_join` keeps **all rows** from **both** data frames, filling in missing v
 
 ```{r}
 # This keeps every person from both tables
-full_join(____, ____, by = "name")
+full_join(band_members, band_instruments, by = "name")
 ```
 
 ::: {style="height: 300px; background-color: white;"}
@@ -538,7 +538,7 @@ A `semi_join` is a **filtering join**. It keeps all rows from the left data fram
 
 ```{r}
 # This returns only the members from band_members who also have an instrument listed
-semi_join(____, ____, by = "name")
+semi_join(band_members, band_instruments, by = "name")
 ```
 
 ::: {style="height: 300px; background-color: white;"}
@@ -570,9 +570,9 @@ table4a
 # pivot_longer() makes the data "long" by gathering the year columns
 table4a %>%
   pivot_longer(
-    cols = c(____, ____),
-    names_to = ____,
-    values_to = ____
+    cols = c('1999', '2000'),
+    names_to = "years",
+    values_to = "cases"
   )
 ```
 
@@ -599,8 +599,8 @@ table2
 # and the values for those new columns from the 'count' column.
 table2 %>%
   pivot_wider(
-    names_from = ____,
-    values_from = ____
+    names_from = type,
+    values_from = count
   )
 ```
 
@@ -626,7 +626,7 @@ table3
 ```{r}
 # Separate the 'rate' column into 'cases' and 'population'
 table3 %>%
-  separate(rate, into = c(____, ____), sep = ____)
+  separate(rate, into = c("cases", "population"), sep = "/")
 ```
 
 ::: {style="height: 300px; background-color: white;"}
@@ -647,7 +647,7 @@ table5
 ```{r}
 # Unite the 'century' and 'year' columns into a new 'year' column
 table5 %>%
-  unite(new_year, ____, ____, sep = "")
+  unite(new_year, "century", "year", sep = "")
 ```
 
 ## \[END\] Video 4
