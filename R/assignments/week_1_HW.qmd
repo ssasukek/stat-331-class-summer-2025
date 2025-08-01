@@ -29,130 +29,132 @@ data(penguins)
 **1. R Basics:** Create a vector named `islands_vector` containing all the unique island names from the `penguins` dataset.
 
 ```{r}
-islands_vector <- unique(penguins$____)
+# dataset_name$col_name
+islands_vector <- unique(penguins$island)
 ```
 
 **2. R Basics:** Check the data type (class) of the `bill_length_mm` column.
 
 ```{r}
-class(penguins$____)
+class(penguins$bill_length_mm)
 ```
 
 **3.`R Basics`:** Use the `nrow()` function to find the number of rows in the penguins dataset.
 
 ```{r}
-nrow(____)
+nrow(penguins)
 ```
 
 **4.`R Basics`:** Use `table()` to count how many penguins there are for each `species`.
 
 ```{r}
-table(penguins$____)
+table(penguins$species)
 ```
 
 **5.`R Basics`:** Use `mean()` to calculate the average `flipper_length_mm`, removing missing values.
 
 ```{r}
-mean(penguins$____, na.rm = ____)
+# na.rm - "NA remove"
+mean(penguins$flipper_length_mm, na.rm = TRUE)
 ```
 
 **6. `dplyr`:** Use `filter()` to create a new data frame `adelie_penguins` containing only the "Adelie" species.
 
 ```{r}
-adelie_penguins <- penguins %>% filter(species == ____)
+adelie_penguins <- penguins %>% filter(species == "Adelie")
 ```
 
 **7. `dplyr`:** Use `select()` to create a data frame with only the `species`, `island`, and `sex` columns.
 
 ```{r}
-penguin_demographics <- penguins %>% select(____, ____, ____)
+penguin_demographics <- penguins %>% select(species, island, sex)
 ```
 
 **8. `dplyr`:** Use `mutate()` to create a new column `bill_depth_cm` which is the `bill_depth_mm` converted to centimeters (divide by 10).
 
 ```{r}
-penguins_cm <- penguins %>% mutate(bill_depth_cm = bill_depth_mm / ____)
+penguins_cm <- penguins %>% mutate(bill_depth_cm = bill_depth_mm / 10)
 ```
 
 **9. `dplyr`:** Use `arrange()` to sort the penguins by `flipper_length_mm` in descending order.
 
 ```{r}
-sorted_penguins <- penguins %>% arrange(desc(____))
+sorted_penguins <- penguins %>% arrange(desc(flipper_length_mm))
 ```
 
 **10. `dplyr`:** Use `group_by()` and `summarize()` to find the average `body_mass_g` for each `species`.
 
 ```{r}
 avg_mass_by_species <- penguins %>%
-  group_by(____) %>%
+  group_by(species) %>%
   summarize(avg_mass = mean(body_mass_g, na.rm = TRUE))
 ```
 
 **11.`dplyr`:** Use `filter()` to keep only penguins with `flipper_length_mm` greater than 200.
 
 ```{r}
-long_flippers <- penguins %>% filter(flipper_length_mm > ____)
+long_flippers <- penguins %>% filter(flipper_length_mm > 200)
 ```
 
 **12.`dplyr`:** Use `mutate()` to create a column called `bill_ratio`, which is `bill_length_mm` divided by `bill_depth_mm`.
 
 ```{r}
-penguins_ratio <- penguins %>% mutate(bill_ratio = ____ / ____)
+penguins_ratio <- penguins %>% mutate(bill_ratio = bill_length_mm / bill_depth_mm)
 ```
 
 **13.`dplyr`:** Use `distinct()` to return a data frame of all unique species and island combinations.
 
 ```{r}
-unique_combos <- penguins %>% distinct(____, ____)
+unique_combos <- penguins %>% distinct(species, island)
 ```
 
 **14.`dplyr`:** Use `slice_max()` to get the five penguins with highest `body_mass_g` for each `species`.
 
 ```{r}
 heaviest <- penguins %>%
-  group_by(____) %>%
-  slice_max(____, ____)
+  group_by(species) %>%
+  slice_max(body_mass_g, n = 5)
 ```
 
 **15. `ggplot2`:** Fill in the `aes()` mapping to create a scatter plot of `flipper_length_mm` (x-axis) vs. `body_mass_g` (y-axis).
 
 ```{r}
-ggplot(data = penguins, mapping = aes(x = ____, y = ____)) +
+ggplot(data = penguins, mapping = aes(x = flipper_length_mm, y = body_mass_g)) +
   geom_point()
 ```
 
 **16. `ggplot2`:** Add a `color` aesthetic to the plot from #15 to color the points by `species`.
 
 ```{r}
-ggplot(data = penguins, mapping = aes(x = flipper_length_mm, y = body_mass_g, color = ____)) +
+ggplot(data = penguins, mapping = aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
   geom_point()
 ```
 
 **17.`ggplot2`:** Use `geom_histogram()` to create a histogram of the `body_mass_g` column.
 
 ```{r}
-ggplot(penguins, aes(x = ____)) +
+ggplot(penguins, aes(x = body_mass_g)) +
   geom_histogram()
 ```
 
 **18.`ggplot2`:** Use `geom_violin()` to create a violin plot of `body_mass_g` by `species`.
 
 ```{r}
-ggplot(penguins, aes(x = species, y = ____)) +
+ggplot(penguins, aes(x = species, y = body_mass_g)) +
   geom_violin()
 ```
 
 **19.`tidyr`:** Use `unite()` to combine the species and island columns into a new column called species_island.
 
 ```{r}
-penguins %>% unite(col = species_island, ____, ____, sep = "_")
+penguins %>% unite(col = species_island, species, island, sep = "_")
 ```
 
 **20. `tidyr` (Blast from the Past):** This is a preview. If you had a "wide" dataset, which `tidyr` function would you use to make it "long"?
 
 ```         
 # Function name:
-# pivot_....()
+# pivot_longer()
 ```
 
 ------------------------------------------------------------------------
@@ -165,46 +167,65 @@ penguins %>% unite(col = species_island, ____, ____, sep = "_")
 
 ```{r}
 # Your code here
+dream_penguins <- penguins %>% filter(island == "Dream")
 ```
 
 **2.** From the `dream_penguins` data frame, create another data frame that contains only the columns `species`, `bill_length_mm`, and `bill_depth_mm`.
 
 ```{r}
 # Your code here
+new_dream_penguins <- dream_penguins %>% select(species, bill_length_mm, bill_depth_mm)
 ```
 
 **3.** Calculate the average `bill_length_mm` for each species, but only for penguins on "Torgersen" island.
 
 ```{r}
 # Your code here
+penguins %>%
+  filter(island == "Torgersen") %>%
+  group_by(species) %>%
+  summarise(avg_bill_length_mm = mean(penguins$bill_length_mm, na.rm = TRUE))
+  
 ```
 
 **4.** Create a new column named `flipper_length_in` that converts the flipper length from millimeters to inches (1 inch = 25.4 mm).
 
 ```{r}
 # Your code here
+penguins_in <- penguins %>% mutate(flipper_length_in = flipper_length_mm / 25.4)
 ```
 
 **5.** Create a scatter plot showing `bill_depth_mm` (x-axis) vs. `bill_length_mm` (y-axis). Add a title to your plot called "Penguin Bill Dimensions".
 
 ```{r}
 # Your code here
+ggplot(data = penguins, mapping = aes(x = bill_depth_mm, y = bill_length_mm)) +
+  geom_point() +
+  ggtitle("Penguin Bill Dimension")
 ```
 
 **6.** Add a new column to the penguins dataset called `is_heavy` that is `TRUE` if `body_mass_g` is greater than 4500 and `FALSE` otherwise.
 
 ```{r}
 # Your code here
+penguins <- penguins %>%
+  mutate(is_heavy = body_mass_g > 4500)
 ```
 
 **7.** Create a line plot of average `body_mass_g` by year, using `group_by()` and `summarize()` first.
 
 ```{r}
 # Your code here
+penguins %>%
+  group_by(year) %>%
+  summarise(avg_mass = mean(body_mass_g, na.rm = TRUE)) %>%
+  ggplot(aes(x = year, y = avg_mass)) + geom_line() + geom_point()
 ```
 
 **8.** Use `arrange()` to sort the dataset first by `species` (A-Z), and then by `flipper_length_mm` in descending order.
 
 ```{r}
 # Your code here
+sorted_penguins <- penguins %>%
+  arrange(species, desc(flipper_length_mm))
 ```
